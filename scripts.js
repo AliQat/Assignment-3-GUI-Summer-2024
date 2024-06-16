@@ -6,62 +6,99 @@ Copyright (c) 2024 by Qattan.  All rights reserved.  May be freely copied or exc
 educational purposes with credit to the author.
 updated by aLI June 3rd
 */
-document.getElementById('tableForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    
-    const errorDiv = document.getElementById('error'); // declare a const so I can display error messages later
-    errorDiv.textContent = '';
-    // 7-10 is just getting user input
-    const startRows = parseInt(document.getElementById('startRows').value);
-    const endRows = parseInt(document.getElementById('endRows').value);
-    const startColumn = parseInt(document.getElementById('startColumn').value);
-    const endColumn = parseInt(document.getElementById('endColumn').value);
-    // 12-23 is input validation for edge cases
-    if (isNaN(startRows) || isNaN(endRows) || isNaN(startColumn) || isNaN(endColumn) || 
-        startRows < -50 || startRows > 50 || endRows < -50 || endRows > 50 || 
-        startColumn < -50 || startColumn > 50 || endColumn < -50 || endColumn > 50) {
+$(document).ready(function() {
+    $('#tableForm').validate({
+        rules: {
+            startRows: {
+                required: true,
+                number: true,
+                range: [-50, 50]
+            },
+            endRows: {
+                required: true,
+                number: true,
+                range: [-50, 50]
+            },
+            startColumn: {
+                required: true,
+                number: true,
+                range: [-50, 50]
+            },
+            endColumn: {
+                required: true,
+                number: true,
+                range: [-50, 50]
+            }
+        },
+        messages: {
+            startRows: {
+                required: "Please enter a starting number for the rows.",
+                number: "Please enter a valid number.",
+                range: "Please enter a number between -50 and 50."
+            },
+            endRows: {
+                required: "Please enter an ending number for the rows.",
+                number: "Please enter a valid number.",
+                range: "Please enter a number between -50 and 50."
+            },
+            startColumn: {
+                required: "Please enter a starting number for the columns.",
+                number: "Please enter a valid number.",
+                range: "Please enter a number between -50 and 50."
+            },
+            endColumn: {
+                required: "Please enter an ending number for the columns.",
+                number: "Please enter a valid number.",
+                range: "Please enter a number between -50 and 50."
+            }
+        },
+        submitHandler: function(form) {
+            const startRows = parseInt($('#startRows').val());
+            const endRows = parseInt($('#endRows').val());
+            const startColumn = parseInt($('#startColumn').val());
+            const endColumn = parseInt($('#endColumn').val());
+
+            if (startRows > endRows || startColumn > endColumn) {
+                $('#error').text('Start values must be less than or equal to end values.');
+                return;
+            }
+
+            generateTable(startRows, endRows, startColumn, endColumn);
+        },
+        invalidHandler: function(event, validator) {
+            $('#error').text('Please correct the errors and try again.');
+        }
         
-        errorDiv.textContent = 'Please enter valid numbers between -50 and 50 for all fields.';
-        return;
-    }
-
-    if (startRows > endRows || startColumn > endColumn) {
-        errorDiv.textContent = 'Start values must be less than or equal to end values.';
-        return;
-    }
-
-    generateTable(startRows, endRows, startColumn, endColumn);
+    });
 });
 
 function generateTable(startRows, endRows, startColumn, endColumn) {
-    const tableContainer = document.getElementById('tableContainer');
-    tableContainer.innerHTML = ''; //initialize the table container as empty and we will dynamically write to it here
+    const tableContainer = $('#tableContainer');
+    tableContainer.empty();
 
-    const table = document.createElement('table'); //add table element to the main html
-    const headerRow = document.createElement('tr');  
-    const emptyHeader = document.createElement('th');
-    headerRow.appendChild(emptyHeader); //top left cell should be empty
+    const table = $('<table></table>');
+    const headerRow = $('<tr></tr>');
+    const emptyHeader = $('<th></th>');
+    headerRow.append(emptyHeader);
     
-    for (let i = startRows; i <= endRows; i++) { // count from start to end rows (user inputted) and append to the headers
-        const th = document.createElement('th');
-        th.textContent = i;
-        headerRow.appendChild(th);
+    for (let i = startRows; i <= endRows; i++) {
+        const th = $('<th></th>').text(i);
+        headerRow.append(th);
     }
-    table.appendChild(headerRow);
+    table.append(headerRow);
 
-    for (let i = startColumn; i <= endColumn; i++) { // count from start to end column (user inputted) and append to the headers
-        const tr = document.createElement('tr'); //create a new row first, then create the header for the row to emulate column
-        const rowHeader = document.createElement('th');
-        rowHeader.textContent = i;
-        tr.appendChild(rowHeader);
+    for (let i = startColumn; i <= endColumn; i++) {
+        const tr = $('<tr></tr>');
+        const rowHeader = $('<th></th>').text(i);
+        tr.append(rowHeader);
 
-        for (let j = startRows; j <= endRows; j++) { //fill in the table data with product of the multipication of each column and each row
-            const td = document.createElement('td');
-            td.textContent = i * j;
-            tr.appendChild(td);
+        for (let j = startRows; j <= endRows; j++) {
+            const td = $('<td></td>').text(i * j);
+            tr.append(td);
         }
-        table.appendChild(tr);
+        table.append(tr);
     }
 
-    tableContainer.appendChild(table); // append the filled in table to the HTML
+    tableContainer.append(table);
 }
+

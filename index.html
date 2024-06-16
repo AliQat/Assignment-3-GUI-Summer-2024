@@ -14,6 +14,9 @@ updated by aLI June 3rd
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HW3</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="jquery.validate.min.js"></script>
+    <script src="jquery.validate.js"></script>
 </head>
 
 <body>
@@ -21,9 +24,9 @@ updated by aLI June 3rd
         <h1>Multiplication Table Generator (numbers between -50 and 50 only)</h1>
         <form id="tableForm">
             <label for="startRows">Enter the starting number of the range you want to calculate <a>(x axis)</a>:</label>
-            <input type="number" id="startRows" name="startRows" min="-50" max="50" required> <!-- take input as a number only (between -50 and 50)-->
+            <input type="number" id="startRows" name="startRows" min="-50" max="50" required>
             <label for="endRows">Enter the ending number of the range you want to calculate <a>(x axis)</a>:</label>
-            <input type="number" id="endRows" name="endRows" min="-50" max="50" required> 
+            <input type="number" id="endRows" name="endRows" min="-50" max="50" required>
 
             <label for="startColumn">Enter the starting number of the range you want to calculate <c>(y axis)</c>:</label>
             <input type="number" id="startColumn" name="startColumn" min="-50" max="50" required>
@@ -32,8 +35,8 @@ updated by aLI June 3rd
 
             <button type="submit">Generate Table</button>
         </form>
-        <div id="error" class="error"></div> <!-- to be used to display errors (erased the contents when refreshed)-->
-        <div id="tableContainer" class="table-container"></div> <!-- to be used to display the table (erased the contents when refreshed)-->
+        <div id="error" class="error"></div>
+        <div id="tableContainer" class="table-container"></div>
     </div>
     <script src="scripts.js"></script>
 </body>
